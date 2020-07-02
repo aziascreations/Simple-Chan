@@ -7,18 +7,24 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
-public class WebDefaultHandler implements HttpHandler {
-	private final static Logger logger = LoggerFactory.getLogger(WebDefaultHandler.class);
+public class WebDefaultPageHandler implements HttpHandler {
+	private final static Logger logger = LoggerFactory.getLogger(WebDefaultPageHandler.class);
 	
+	private SimpleHtmlCreator shc;
 	private ArrayList<Board> boards;
 	
-	public WebDefaultHandler(ArrayList<Board> boards) {
+	public WebDefaultPageHandler(SimpleHtmlCreator shc, ArrayList<Board> boards) throws IOException {
 		if(boards == null) {
 			throw new NullPointerException("A null Arraylist<Board> Object was given to WebDefaultHandler !");
 		}
+		if(shc == null) {
+			throw new NullPointerException("A null SimpleHtmlCreator Object was given to WebDefaultHandler !");
+		}
 		
+		this.shc = shc;
 		this.boards = boards;
 	}
 	
@@ -26,26 +32,7 @@ public class WebDefaultHandler implements HttpHandler {
 	public void handle(HttpExchange exchange) throws IOException {
 		if(exchange.getRequestMethod().toUpperCase().equals("GET")) {
 			if(exchange.getRequestURI().getPath().equals("/")) {
-				
-				String response = "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\">\n" +
-										  "<title>${title}</title></head><body>\n" +
-										  "\t\n";
-				response += exchange.getRequestURI().getPath() + "<br>";
-				response += exchange.getHttpContext().getPath() + "<br>";
-				response += exchange.getRequestURI().getPath()
-									.replaceFirst("^"+exchange.getHttpContext().getPath(),
-											"") + "<br>";
-				response += exchange.getRequestURI().getPath()
-									.replaceFirst("^"+exchange.getHttpContext().getPath(),
-											"")
-									.replaceFirst("^/", "") + "<br>";
-				response += "<br><br>";
-				
-				for(Board board : boards) {
-					response += "<a href=\"/"+board.getId()+"/\">"+board.getName()+"</a><br>";
-				}
-				
-				response += "</body></html>";
+				String response = shc.getIndexPage(boards);
 				exchange.sendResponseHeaders(200, response.length());
 				OutputStream os = exchange.getResponseBody();
 				os.write(response.getBytes());

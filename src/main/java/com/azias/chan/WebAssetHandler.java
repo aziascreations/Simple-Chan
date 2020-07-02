@@ -44,6 +44,25 @@ public class WebAssetHandler implements HttpHandler {
 				} else {
 					byte[] response = is.readAllBytes();
 					is.close();
+					
+					// Getting the file extension and setting the mime-type.
+					int i = desiredResourcePath.getFileName().toString().lastIndexOf('.');
+					if(i > 0) {
+						switch(desiredResourcePath.getFileName().toString().substring(i+1).toLowerCase()) {
+							case "css":
+								exchange.getResponseHeaders().add("Content-Type", "text/css");
+								break;
+							case "js":
+								exchange.getResponseHeaders().add("Content-Type", "text/javascript");
+								break;
+							default:
+								exchange.getResponseHeaders().add("Content-Type", "text/plain");
+								break;
+						}
+					} else {
+						exchange.getResponseHeaders().add("Content-Type", "text/plain");
+					}
+					
 					exchange.sendResponseHeaders(200, response.length);
 					
 					OutputStream os = exchange.getResponseBody();

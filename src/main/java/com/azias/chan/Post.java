@@ -32,4 +32,8 @@ public class Post {
 	public String getAuthor() {
 		return author;
 	}
+	
+	public long getPostDate() {
+		return postDate;
+	}
 }

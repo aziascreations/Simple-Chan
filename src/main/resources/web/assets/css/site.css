@@ -1,0 +1,105 @@
+body {
+	background-color: #607D8B;
+}
+
+h1, h2, h3, h4, h5, h6, p, span, ul, li, ol {
+	color: #eeeeee;
+	text-shadow: 1px 1px 1px #1c313a;
+}
+
+h1, footer {
+	text-align: center;
+}
+
+hr {
+	border-color: #8eacbb;
+}
+
+header, main, footer, .margin-container {
+	margin: 15px;
+}
+
+h1 {
+	font-size: 2em;
+}
+
+
+/* Browsing */
+main > #board-list {
+	min-width: 100%;
+	width: 100%;
+}
+
+main > #board-list tr td:first-child {
+	font-weight: bold;
+	color: #eeeeee;
+}
+
+main > #board-list tr td:nth-child(2) {
+	padding-left: 15px;
+	min-width: 100%;
+	width: 100%;
+}
+
+main > #board-list tr td:nth-child(2) > p {
+	display: inline;
+}
+
+main > #board-list tr td:nth-child(2) > blockquote {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	color: #eeeeee;
+	text-shadow: 1px 1px 1px #1c313a;
+}
+
+#board-list a, #board-list a:hover, #board-list a:visited {
+	color: #bbdefb;
+}
+
+#board-list p.goto > a {
+	text-decoration: none;
+}
+
+
+/* Thread */
+
+#thread-container {
+	min-width: 100%;
+	width: 100%;
+}
+
+#thread-container > #post-title {
+	color: #ef9a9a;
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+
+.post-container {
+	min-width: 100%;
+	width: 100%;
+}
+
+.post-container > .anchor {
+	display: none;
+}
+
+#thread-container > hr {
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+.post-container > p {
+	display: inline;
+	font-weight: bold;
+}
+
+.post-container > blockquote {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	color: #eeeeee;
+	text-shadow: 1px 1px 1px #1c313a;
+}
+
+.post-container a, .post-container a:hover, .post-container a:visited {
+	color: #bbdefb;
+}

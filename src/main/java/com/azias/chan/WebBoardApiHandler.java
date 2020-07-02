@@ -14,12 +14,12 @@ import java.util.HashMap;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-public class WebBoardHandler implements HttpHandler {
-	private final static Logger logger = LoggerFactory.getLogger(WebBoardHandler.class);
+public class WebBoardApiHandler implements HttpHandler {
+	private final static Logger logger = LoggerFactory.getLogger(WebBoardApiHandler.class);
 	
 	private Board board;
 	
-	public WebBoardHandler(Board board) {
+	public WebBoardApiHandler(Board board) {
 		if(board == null) {
 			throw new NullPointerException("A null Board Object was given to WebBoardHandler !");
 		}
@@ -306,7 +306,8 @@ public class WebBoardHandler implements HttpHandler {
 			if(isThread) {
 				return "No thread message given !";
 			} else {
-				fields.put("message", Post.DEFAULT_MESSAGE);
+				//fields.put("message", Post.DEFAULT_MESSAGE);
+				return "No post message given !";
 			}
 		}
 		

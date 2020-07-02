@@ -9,6 +9,7 @@ public class Thread {
 	private ArrayList<Post> posts;
 	private long threadId;
 	private boolean isSaged;
+	private String title;
 	
 	public Thread(Post originalPost) {
 		this(originalPost, originalPost.getPostId(), DEFAULT_TITLE);
@@ -31,6 +32,7 @@ public class Thread {
 		posts.add(originalPost);
 		
 		this.threadId = threadId;
+		this.title = title;
 		
 		isSaged = false;
 	}
@@ -49,6 +51,10 @@ public class Thread {
 	
 	public long getThreadId() {
 		return threadId;
+	}
+	
+	public String getTitle() {
+		return title;
 	}
 	
 	// remove post

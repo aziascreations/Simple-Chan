@@ -68,4 +68,8 @@ public class Board {
 		currentBoardPostId++;
 		return currentBoardPostId;
 	}
+	
+	public LinkedList<Thread> getThreads() {
+		return threads;
+	}
 }

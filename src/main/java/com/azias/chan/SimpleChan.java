@@ -19,6 +19,8 @@ public class SimpleChan {
 		boards.add(new Board("b", "Random"));
 		boards.add(new Board("v", "Vydia"));
 		
+		SimpleHtmlCreator shc = new SimpleHtmlCreator("/web/templates");
+		
 		HttpServer server = HttpServer.create(new InetSocketAddress(WEB_SERVER_PORT), 0);
 		server.createContext("/assets", new WebAssetHandler());
 		
@@ -27,14 +29,15 @@ public class SimpleChan {
 				throw new IOException("Board id "+board.getId()+" isn't valid !");
 			}
 			
-			if(board.getId().matches("(assets)")) {
+			if(board.getId().matches("(assets|board)")) {
 				throw new IOException("Board "+board.getName()+" uses a reserved id !");
 			}
 			
-			server.createContext("/"+board.getId(), new WebBoardHandler(board));
+			server.createContext("/api/v1/"+board.getId(), new WebBoardApiHandler(board));
 		}
 		
-		server.createContext("/", new WebDefaultHandler(boards));
+		server.createContext("/board", new WebBoardPageHandler(shc, boards));
+		server.createContext("/", new WebDefaultPageHandler(shc, boards));
 		server.setExecutor(null);
 		server.start();
 	}
