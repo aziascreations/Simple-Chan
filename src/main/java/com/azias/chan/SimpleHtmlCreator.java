@@ -17,6 +17,7 @@ public class SimpleHtmlCreator {
 	private static final String TEMPLATE_FIELD_MAIN = "${sc.main}";
 	private static final String TEMPLATE_FIELD_TITLE_PAGE = "${sc.title}";
 	private static final String TEMPLATE_FIELD_TITLE_HEADER = "${sc.header.title}";
+	private static final String TEMPLATE_FIELD_FOOTER = "${sc.footer}";
 	
 	private static final String TEMPLATE_FIELD_BOARD_LIST = "${sc.board.list}";
 	
@@ -29,12 +30,17 @@ public class SimpleHtmlCreator {
 	
 	private static final String TEMPLATE_FIELD_THREAD_POSTS = "${sc.thread.posts}";
 	
+	private static final String TEMPLATE_FIELD_FORM_THREADID = "${sc.form.threadid}";
+	private static final String TEMPLATE_FIELD_FORM_BOARDID = "${sc.form.boardid}";
+	
 	private static final String DATE_FORMAT = "d/M/y H:m:s";
 	
+	private ArrayList<Board> boards;
 	private String templateRootFolder;
 	private String pageBase, pageIndex, pageBoardList, pageBoardListRow, pageThreadContainer, pageThreadPost;
 	
-	public SimpleHtmlCreator(String templateRootFolder) throws IOException {
+	public SimpleHtmlCreator(ArrayList<Board> boards, String templateRootFolder) throws IOException {
+		this.boards = boards;
 		this.templateRootFolder = templateRootFolder;
 		loadPageTemplates(templateRootFolder);
 	}
@@ -62,35 +68,42 @@ public class SimpleHtmlCreator {
 		
 		return pageBase.replace(TEMPLATE_FIELD_MAIN, boardList)
 					   .replace(TEMPLATE_FIELD_TITLE_PAGE, "Simple Chan - Index")
-					   .replace(TEMPLATE_FIELD_TITLE_HEADER, "Simple Chan - Index");
+					   .replace(TEMPLATE_FIELD_TITLE_HEADER, "Simple Chan - Index")
+					   .replace(TEMPLATE_FIELD_FOOTER, getGenericFooter());
 	}
 	
 	public String getBoardPostsPageAsList(Board board) {
 		String postList = "";
 		int i = 0;
 		
-		for(Thread thread : board.getThreads()) {
-			postList += pageBoardListRow
-								.replace(TEMPLATE_FIELD_BOARD_POST_TITLE, thread.getTitle())
-								.replace(TEMPLATE_FIELD_BOARD_POST_AUTHOR, thread.getPosts().get(0).getAuthor())
-								.replace(TEMPLATE_FIELD_BOARD_POST_DATE,
-										new SimpleDateFormat(DATE_FORMAT).format(
-												new Date(thread.getPosts().get(0).getPostDate())
-										)
-								)
-								.replace(TEMPLATE_FIELD_BOARD_POST_ID, "#"+thread.getPosts().get(0).getPostId())
-								.replace(TEMPLATE_FIELD_BOARD_POST_MESSAGE, thread.getPosts().get(0).getMessage())
-								.replace(TEMPLATE_FIELD_BOARD_POST_GOTOURL, String.valueOf(thread.getPosts().get(0).getPostId()));
-			if(i < board.getThreads().size() - 1) {
-				postList += "<tr><td colspan=\"2\"><hr></td></tr>";
-				i++;
+		if(board.getThreads().size() > 0) {
+			for(Thread thread : board.getThreads()) {
+				postList += pageBoardListRow
+									.replace(TEMPLATE_FIELD_BOARD_POST_TITLE, thread.getTitle())
+									.replace(TEMPLATE_FIELD_BOARD_POST_AUTHOR, thread.getPosts().get(0).getAuthor())
+									.replace(TEMPLATE_FIELD_BOARD_POST_DATE,
+											new SimpleDateFormat(DATE_FORMAT).format(
+													new Date(thread.getPosts().get(0).getPostDate())
+											)
+									)
+									.replace(TEMPLATE_FIELD_BOARD_POST_ID, "#" + thread.getPosts().get(0).getPostId())
+									.replace(TEMPLATE_FIELD_BOARD_POST_MESSAGE, thread.getPosts().get(0).getMessage())
+									.replace(TEMPLATE_FIELD_BOARD_POST_GOTOURL, thread.getPosts().get(0).getPostId()+"/");
+				if(i < board.getThreads().size() - 1) {
+					postList += "<tr><td colspan=\"2\"><hr></td></tr>";
+					i++;
+				}
 			}
+		} else {
+			postList = "<h2 id=\"board-list-empty\">There are no threads on this board !</h2>";
 		}
 		
 		return pageBase.replace(TEMPLATE_FIELD_MAIN, pageBoardList)
 					   .replace(TEMPLATE_FIELD_BOARD_LIST, postList)
 					   .replace(TEMPLATE_FIELD_TITLE_PAGE, "Simple Chan - "+board.getName())
-					   .replace(TEMPLATE_FIELD_TITLE_HEADER, board.getName());
+					   .replace(TEMPLATE_FIELD_TITLE_HEADER, board.getName())
+					   .replace(TEMPLATE_FIELD_FOOTER, getGenericFooter() + " [ <a href=\"/\">home</a> ]")
+					   .replace(TEMPLATE_FIELD_FORM_BOARDID, board.getId());
 	}
 	
 	public String getThreadPage(Board requestedBoard, Thread requestedThread) {
@@ -118,6 +131,27 @@ public class SimpleHtmlCreator {
 					   .replace(TEMPLATE_FIELD_THREAD_POSTS, postList)
 					   .replace(TEMPLATE_FIELD_TITLE_PAGE, "Simple Chan - "+requestedBoard.getName())
 					   .replace(TEMPLATE_FIELD_TITLE_HEADER, requestedBoard.getName())
-					   .replace(TEMPLATE_FIELD_BOARD_POST_TITLE, requestedThread.getTitle());
+					   .replace(TEMPLATE_FIELD_BOARD_POST_TITLE, requestedThread.getTitle())
+					   .replace(TEMPLATE_FIELD_FOOTER,
+							   getGenericFooter() +
+									   " [ <a href=\"/\">home</a> ]"+
+									   " [ <a href=\"/board/"+requestedBoard.getId()+"/\">board</a> ]")
+					   .replace(TEMPLATE_FIELD_FORM_BOARDID, requestedBoard.getId())
+					   .replace(TEMPLATE_FIELD_FORM_THREADID, String.valueOf(requestedThread.getThreadId()));
+	}
+	
+	private String getGenericFooter() {
+		String footer = "[ ";
+		int i = 0;
+		
+		for(Board board : boards) {
+			footer += "<a href=\"/board/"+board.getId()+"/\">"+board.getId()+"</a>";
+			if(i < boards.size() - 1) {
+				footer += " | ";
+				i++;
+			}
+		}
+		
+		return footer+" ]";
 	}
 }

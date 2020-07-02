@@ -40,7 +40,7 @@ public class WebDefaultPageHandler implements HttpHandler {
 			} else {
 				logger.debug("Redirected user to root from: {}", exchange.getRequestURI().getPath());
 				exchange.getResponseHeaders().add("Location", "/");
-				exchange.sendResponseHeaders(301, 0);
+				exchange.sendResponseHeaders(302, 0);
 				exchange.close();
 			}
 		} else {

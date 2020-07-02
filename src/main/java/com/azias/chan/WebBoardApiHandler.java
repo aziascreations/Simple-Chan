@@ -36,7 +36,7 @@ public class WebBoardApiHandler implements HttpHandler {
 					   .replaceFirst("^"+exchange.getHttpContext().getPath(), "").equals("")) {
 				logger.debug("Redirected user to root of board.");
 				exchange.getResponseHeaders().add("Location", "/"+board.getId()+"/");
-				exchange.sendResponseHeaders(301, 0);
+				exchange.sendResponseHeaders(302, 0);
 				exchange.close();
 			}
 			

@@ -118,3 +118,7 @@ gradle-app.setting
 
 # Custom
 .idea/
+/src/main/resources/web/base.html
+/src/main/resources/web/board-catalog.html
+/src/main/resources/web/board-root.html
+/src/main/resources/web/index.html

@@ -1,3 +1,7 @@
+html {
+	min-height: 100vh;
+}
+
 body {
 	background-color: #607D8B;
 }
@@ -22,6 +26,15 @@ header, main, footer, .margin-container {
 h1 {
 	font-size: 2em;
 }
+
+li > a, li > a:hover, li > a:visited {
+	color: #bbdefb;
+}
+
+main > li, main > ul > li {
+	margin-bottom: 10px;
+}
+
 
 
 /* Browsing */
@@ -48,6 +61,7 @@ main > #board-list tr td:nth-child(2) > p {
 main > #board-list tr td:nth-child(2) > blockquote {
 	margin-top: 5px;
 	margin-bottom: 5px;
+	margin-left: 10px;
 	color: #eeeeee;
 	text-shadow: 1px 1px 1px #1c313a;
 }
@@ -58,6 +72,14 @@ main > #board-list tr td:nth-child(2) > blockquote {
 
 #board-list p.goto > a {
 	text-decoration: none;
+}
+
+h2#board-list-empty {
+	font-weight: bold;
+	font-size: 1.5em;
+	text-align: center;
+	margin-top: 25px;
+	margin-bottom: 25px;
 }
 
 
@@ -96,10 +118,74 @@ main > #board-list tr td:nth-child(2) > blockquote {
 .post-container > blockquote {
 	margin-top: 5px;
 	margin-bottom: 5px;
+	margin-left: 10px;
 	color: #eeeeee;
 	text-shadow: 1px 1px 1px #1c313a;
 }
 
 .post-container a, .post-container a:hover, .post-container a:visited {
 	color: #bbdefb;
+}
+
+
+/* Footer */
+footer a, footer a:hover, footer a:visited,
+.window-toggler a, .window-toggler a:hover, .window-toggler a:visited{
+	color: #bbdefb;
+	user-select: none;
+	cursor: pointer;
+}
+
+.window-toggler {
+	text-align: center;
+	display: inline;
+	margin-right: 15px;
+}
+
+
+/* Forms */
+#form-thread {
+}
+
+#form-post {
+	
+}
+
+.form-window {
+	position: absolute;
+	border: 2px solid #455a64;
+	min-height: 150px;
+	min-width: 150px;
+	background-color: #607D8B;
+	padding: 5px;
+}
+
+.form-window > .form-title, .form-window > p.form-error {
+	width: 100%;
+	text-align: center;
+	font-weight: bold;
+}
+
+.form-window > p.form-error {
+	color: #ef9a9a;
+}
+
+.form-window > .form-close-button {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	user-select: none;
+}
+
+.form-window > .form-close-button:hover {
+	cursor: pointer;
+}
+
+.form-window button {
+	float: right;
+}
+
+.form-window input {
+	width: calc( 100% - 8px );
+	margin-bottom: 5px;
 }

@@ -41,7 +41,7 @@ public class WebBoardPageHandler implements HttpHandler {
 		if(requestedURL.length() <= 0) {
 			logger.warn("Redirected user to root from: {}", exchange.getRequestURI().getPath());
 			exchange.getResponseHeaders().add("Location", "/");
-			exchange.sendResponseHeaders(301, 0);
+			exchange.sendResponseHeaders(302, 0);
 			exchange.close();
 			return;
 		}
@@ -88,7 +88,7 @@ public class WebBoardPageHandler implements HttpHandler {
 							desiredThreadId,
 							exchange.getRequestURI().getPath());
 					exchange.getResponseHeaders().add("Location", "/");
-					exchange.sendResponseHeaders(301, 0);
+					exchange.sendResponseHeaders(302, 0);
 					exchange.close();
 					return;
 				}

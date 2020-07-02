@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Simple Chan</title>
+<title>${sc.title}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="/assets/css/reset.css">
 <link rel="stylesheet" href="/assets/css/site.css">
 </head>
@@ -10,17 +11,118 @@
 <header><h1>${sc.header.title}</h1></header>
 <hr>
 <main>
+<div id="form-thread" class="form-window" hidden>
+<p class="form-title">Create thread</p>
+<a class="form-close-button" onclick="toggleWindow('#form-thread')">X</a>
+<hr>
+<input type="hidden" id="form-field-boardid-thread" name="postThreadId" value="${sc.form.boardid}">
+<input id="input-title" type="text" placeholder="Title"><br>
+<input id="input-author-thread" type="text" placeholder="Anonymous"><br>
+<textarea name="" id="text-thread" cols="30" rows="10" placeholder="Comment"></textarea>
+<hr>
+<p class="form-error" hidden></p>
+<hr class="form-error" hidden>
+<button onclick="processThreadForm()">Submit</button>
+</div>
+<div id="form-post" class="form-window" hidden>
+<p class="form-title">Post reply in thread</p>
+<a class="form-close-button" onclick="toggleWindow('#form-post')">X</a>
+<hr>
+<input type="hidden" id="form-field-threadid" name="postThreadId" value="${sc.form.threadid}">
+<input type="hidden" id="form-field-boardid-post" name="postThreadId" value="${sc.form.boardid}">
+<input id="input-author-post" type="text" placeholder="Anonymous"><br>
+<textarea name="" id="text-post" cols="30" rows="10" placeholder="Comment"></textarea>
+<hr>
+<p class="form-error" hidden></p>
+<hr class="form-error" hidden>
+<button onclick="processPostForm()">Submit</button>
+</div>
 ${sc.main}
 </main>
 <hr>
 <footer>
-<p>[Insert footer here]</p>
+<p>${sc.footer}</p>
 </footer>
 <script src="/assets/js/jquery-3.5.1.min.js"></script>
+<script src="/assets/js/jquery-ui.min.js"></script>
 <script>
-//$(document).ready(function() {
-//	$('main').removeAttr('hidden');
-//});	
+const apiUrl = "http://"+window.location.hostname+"/api/v1/"
+$(document).ready(function() {
+$('#form-thread').draggable({ containment: "html", scroll: false });
+$('#form-post').draggable({ containment: "html", scroll: false });
+//$('main').removeAttr('hidden');
+});
+function toggleWindow(windowId) {
+$(windowId).toggle();
+}
+function processThreadForm() {
+$('#form-thread .form-error').hide();
+var data = {};
+if($('#form-thread #input-title').val() !== "") {
+data.title = $('#form-thread #input-title').val();
+}
+if($('#form-thread #input-author-thread').val() !== "") {
+data.author = $('#form-thread #input-author-thread').val();
+}
+if($('#form-thread #text-thread').val() !== "") {
+data.message = $('#form-thread #text-thread').val();
+}
+var currentApiUr = apiUrl + $('#form-thread #form-field-boardid-thread').val() + "/thread/";
+console.log(apiUrl);
+console.log(data);
+$.post(currentApiUr, data, function(data, status) {
+data = JSON.parse(data);
+console.log(data);
+console.log("New thread: "+data.threadId);
+console.log("Moving to: "+"http://" +
+window.location.hostname +
+"/board/" +
+$('#form-thread #form-field-boardid-thread').val() +
+"/"+data.threadId+"/");
+window.location.href =
+"http://" +
+window.location.hostname +
+"/board/" +
+$('#form-thread #form-field-boardid-thread').val() +
+"/"+data.threadId+"/";
+}).fail(function(jqXHR, textStatus, error){
+console.log("Failure:");
+console.log(jqXHR);
+console.log(textStatus);
+console.log(error);
+$('#form-thread p.form-error').text("ERROR = "+jqXHR.statusText);
+$('#form-thread .form-error').show();
+});
+}
+function processPostForm() {
+$('#form-post .form-error').hide();
+var data = {};
+if($('#form-post #input-author-post').val() !== "") {
+data.author = $('#form-post #input-author-post').val();
+}
+if($('#form-post #text-post').val() !== "") {
+data.message = $('#form-post #text-post').val();
+}
+data.thread = $('#form-post #form-field-threadid').val();
+var currentApiUr = apiUrl + $('#form-post #form-field-boardid-post').val() + "/post/";
+console.log(currentApiUr);
+console.log(data);
+$.post(currentApiUr, data, function(data, status) {
+data = JSON.parse(data);
+console.log(data);
+reloadPage();
+}).fail(function(jqXHR, textStatus, error){
+console.log("Failure:");
+console.log(jqXHR);
+console.log(textStatus);
+console.log(error);
+$('#form-post p.form-error').text("ERROR = "+jqXHR.statusText);
+$('#form-post .form-error').show();
+});
+}
+function reloadPage() {
+document.location.reload(true);
+}
 </script>
 </body>
 </html>
