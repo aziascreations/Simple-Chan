@@ -55,6 +55,9 @@ public class WebAssetHandler implements HttpHandler {
 							case "js":
 								exchange.getResponseHeaders().add("Content-Type", "text/javascript");
 								break;
+							case "png":
+								exchange.getResponseHeaders().add("Content-Type", "image/png");
+								break;
 							default:
 								exchange.getResponseHeaders().add("Content-Type", "text/plain");
 								break;

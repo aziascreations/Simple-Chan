@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="/assets/css/reset.css">
 <link rel="stylesheet" href="/assets/css/site.css">
+<link rel="icon" type="image/png" href="/assets/favicon.png"/>
 </head>
 <body>
 <header><h1>${sc.header.title}</h1></header>
@@ -122,6 +123,10 @@ $('#form-post .form-error').show();
 }
 function reloadPage() {
 document.location.reload(true);
+}
+function quoteReply(postId) {
+$('#form-post').show();
+$('#form-post #text-post').append(">>"+postId);
 }
 </script>
 </body>

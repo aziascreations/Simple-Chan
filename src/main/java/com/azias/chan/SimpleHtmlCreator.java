@@ -5,6 +5,8 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SimpleHtmlCreator {
 	private static final String TEMPLATE_PATH_BASE = "base.html";
@@ -34,6 +36,11 @@ public class SimpleHtmlCreator {
 	private static final String TEMPLATE_FIELD_FORM_BOARDID = "${sc.form.boardid}";
 	
 	private static final String DATE_FORMAT = "d/M/y H:m:s";
+	
+	private Pattern patternQuoteId = Pattern.compile("(?<quoteid>>>[0-9]+)");
+	private Pattern patternQuote = Pattern.compile("(?<quote>>.+\\n)?");
+	// I couldn't get this to work without this for some reason...
+	private Pattern patternNewLine = Pattern.compile("(?<trash>\\n)");
 	
 	private ArrayList<Board> boards;
 	private String templateRootFolder;
@@ -86,8 +93,8 @@ public class SimpleHtmlCreator {
 													new Date(thread.getPosts().get(0).getPostDate())
 											)
 									)
-									.replace(TEMPLATE_FIELD_BOARD_POST_ID, "#" + thread.getPosts().get(0).getPostId())
-									.replace(TEMPLATE_FIELD_BOARD_POST_MESSAGE, thread.getPosts().get(0).getMessage())
+									.replace(TEMPLATE_FIELD_BOARD_POST_ID, String.valueOf(thread.getPosts().get(0).getPostId()))
+									.replace(TEMPLATE_FIELD_BOARD_POST_MESSAGE, formatPostText(thread.getPosts().get(0).getMessage()))
 									.replace(TEMPLATE_FIELD_BOARD_POST_GOTOURL, thread.getPosts().get(0).getPostId()+"/");
 				if(i < board.getThreads().size() - 1) {
 					postList += "<tr><td colspan=\"2\"><hr></td></tr>";
@@ -118,8 +125,8 @@ public class SimpleHtmlCreator {
 												new Date(post.getPostDate())
 										)
 								)
-								.replace(TEMPLATE_FIELD_BOARD_POST_ID, "#"+post.getPostId())
-								.replace(TEMPLATE_FIELD_BOARD_POST_MESSAGE, post.getMessage());
+								.replace(TEMPLATE_FIELD_BOARD_POST_ID, String.valueOf(post.getPostId()))
+								.replace(TEMPLATE_FIELD_BOARD_POST_MESSAGE, formatPostText(post.getMessage()));
 			
 			if(i < requestedThread.getPosts().size() - 1) {
 				postList += "<hr>";
@@ -153,5 +160,18 @@ public class SimpleHtmlCreator {
 		}
 		
 		return footer+" ]";
+	}
+	
+	private String formatPostText(String postText) {
+		//postText.replaceAll("[\\r\\n]+", "<br>");
+		
+		/*postText = patternQuoteId.matcher(postText)
+						   .replaceAll("<span class=\"quote-id\">${quoteid}</span>");
+		postText = patternQuote.matcher(postText)
+						   .replaceAll("<span class=\"quote\">${quote}</span>");/**/
+		postText = patternNewLine.matcher(postText)
+						   .replaceAll("<br>");
+		
+		return postText;
 	}
 }

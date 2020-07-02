@@ -2,8 +2,8 @@
 <a class="anchor" name="#${sc.board.post.id}"></a>
 <p class="author">${sc.board.post.author}</p>
 <p class="date">${sc.board.post.date}</p>
-<p class="id">${sc.board.post.id}</p>
-<blockquote>
+<p class="id" onclick="quoteReply(${sc.board.post.id})">#${sc.board.post.id}</p>
+<blockquote class="post-message">
 ${sc.board.post.message}
 </blockquote>
 </div>
