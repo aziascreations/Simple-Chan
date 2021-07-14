@@ -17,3 +17,13 @@ dependencies {
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
+
+// https://www.baeldung.com/gradle-fat-jar
+task customFatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'com.azias.chan.SimpleChan'
+    }
+    baseName = 'simple-chan'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}

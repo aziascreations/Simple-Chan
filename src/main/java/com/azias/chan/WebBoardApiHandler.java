@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -21,7 +22,10 @@ public class WebBoardApiHandler implements HttpHandler {
 	
 	public WebBoardApiHandler(Board board) {
 		if(board == null) {
+			logger.error("Instantiated {} with null Board Object...", this.getClass().getName());
 			throw new NullPointerException("A null Board Object was given to WebBoardHandler !");
+		} else {
+			logger.trace("Instantiating {} with Board whose id is \"{}\"...", this.getClass().getName(), board.getId());
 		}
 		
 		this.board = board;
@@ -232,6 +236,13 @@ public class WebBoardApiHandler implements HttpHandler {
 		}
 	}
 	
+	/**
+	 *
+	 * @param postData - A String that contains the raw post data
+	 * @param charset - The charset in which the postData is encoded.
+	 * @return A HashMap that contains the post field and its associated value if any were found,
+	 *          otherwise it returns a null value to indicate that nothing could be parsed.
+	 */
 	private HashMap<String, String> parsePostFields(String postData, Charset charset) {
 		HashMap<String, String> postFields = null;
 		
@@ -244,10 +255,18 @@ public class WebBoardApiHandler implements HttpHandler {
 				String[] fieldValues = fieldPair.split("=");
 				
 				if(fieldValues.length == 2) {
-					postFields.put(
+					/*postFields.put(
 							URLDecoder.decode(fieldValues[0], charset),
 							URLDecoder.decode(fieldValues[1], charset)
-					);
+					);/**/
+					try {
+						postFields.put(
+								URLDecoder.decode(fieldValues[0], charset.name()),
+								URLDecoder.decode(fieldValues[1], charset.name())
+						);/**/
+					} catch(UnsupportedEncodingException e) {
+						e.printStackTrace();
+					}
 				} else {
 					logger.warn("Parsing failure !");
 				}
@@ -263,8 +282,8 @@ public class WebBoardApiHandler implements HttpHandler {
 	 * Verifies the post fields to make sure they are present and valid.
 	 * Also attempts to fix inconsistencies like null fields.
 	 * This is not an efficient way of doing his, but it works and I couldn't be bothered to play with Exceptions.
-	 * @param fields
-	 * @param isThread
+	 * @param fields - HashMap that contains the post field and its associated value.
+	 * @param isThread - boolean that indicated whether or not the checks are done for a thread.
 	 * @return null if there is no error, otherwise it returns the reason an error occurred.
 	 */
 	private String getPostFieldsErrorMessage(HashMap<String, String> fields, boolean isThread) {

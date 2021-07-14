@@ -47,7 +47,7 @@ ${sc.main}
 <script src="/assets/js/jquery-3.5.1.min.js"></script>
 <script src="/assets/js/jquery-ui.min.js"></script>
 <script>
-const apiUrl = "http://"+window.location.hostname+"/api/v1/"
+const apiUrl = "http://"+location.host+"/api/v1/"
 $(document).ready(function() {
 $('#form-thread').draggable({ containment: "html", scroll: false });
 $('#form-post').draggable({ containment: "html", scroll: false });
@@ -76,13 +76,13 @@ data = JSON.parse(data);
 console.log(data);
 console.log("New thread: "+data.threadId);
 console.log("Moving to: "+"http://" +
-window.location.hostname +
+location.host +
 "/board/" +
 $('#form-thread #form-field-boardid-thread').val() +
 "/"+data.threadId+"/");
 window.location.href =
 "http://" +
-window.location.hostname +
+location.host +
 "/board/" +
 $('#form-thread #form-field-boardid-thread').val() +
 "/"+data.threadId+"/";

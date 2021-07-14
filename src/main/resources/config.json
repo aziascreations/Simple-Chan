@@ -1,0 +1,17 @@
+{
+  "boards": [
+    {
+      "id": "a",
+      "name": "Anime & Manga"
+    },
+    {
+      "id": "b",
+      "name": "Random"
+    },
+    {
+      "id": "v",
+      "name": "Vydia"
+    }
+  ],
+  "port": 80
+}
