@@ -6,10 +6,9 @@ public class Thread {
 	public static final String DEFAULT_TITLE = "";
 	public static final int SIZE_MAX_TITLE  = 128;
 	
-	private ArrayList<Post> posts;
-	private long threadId;
-	private boolean isSaged;
-	private String title;
+	private final ArrayList<Post> posts;
+	private final long threadId;
+	private final String title;
 	
 	public Thread(Post originalPost) {
 		this(originalPost, originalPost.getPostId(), DEFAULT_TITLE);
@@ -33,20 +32,23 @@ public class Thread {
 		
 		this.threadId = threadId;
 		this.title = title;
-		
-		isSaged = false;
 	}
 	
-	public ArrayList<Post> getPosts() {
-		return posts;
-	}
-	
+	/**
+	 * Adds a post to the thread.
+	 * @param originalPost Post Object to add to the thread.
+	 * @return true or false depending on whether the given post could be added to the thread.
+	 */
 	public boolean addPost(Post originalPost) {
 		if(originalPost == null) {
 			throw new NullPointerException("A null Post Object was added to a thread !");
 		}
 		
 		return posts.add(originalPost);
+	}
+	
+	public ArrayList<Post> getPosts() {
+		return posts;
 	}
 	
 	public long getThreadId() {
@@ -56,6 +58,4 @@ public class Thread {
 	public String getTitle() {
 		return title;
 	}
-	
-	// remove post
 }

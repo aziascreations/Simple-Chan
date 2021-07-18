@@ -3,9 +3,6 @@ package com.azias.chan;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -13,17 +10,13 @@ import java.util.ArrayList;
 /**
  * The WebDefaultPageHandler implements the HttpHandler interfaces and is used to serve the app's root or redirect
  *  users to it if they access an unhandled context.
- *
- * @version 1.0.0
  */
 public class WebDefaultPageHandler implements HttpHandler {
-	private static final Logger logger = LoggerFactory.getLogger(WebDefaultPageHandler.class);
+	private final SimpleHtmlCreator shc;
+	private final ArrayList<Board> boards;
 	
-	private SimpleHtmlCreator shc;
-	private ArrayList<Board> boards;
-	
-	public WebDefaultPageHandler(SimpleHtmlCreator shc, ArrayList<Board> boards) throws IOException {
-		logger.trace("Instantiating {}...", this.getClass().getName());
+	public WebDefaultPageHandler(SimpleHtmlCreator shc, ArrayList<Board> boards) {
+		System.out.println("Instantiating " + this.getClass().getName() + "...");
 		
 		if(shc == null) {
 			throw new NullPointerException("A null SimpleHtmlCreator Object was given to "+this.getClass().getName()+" !");
@@ -38,22 +31,22 @@ public class WebDefaultPageHandler implements HttpHandler {
 	
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
-		logger.trace("{} is handling a {} request for {}", this.getClass().getName(), exchange.getRequestMethod(),
-				exchange.getRequestURI().getPath());
+		System.out.println(this.getClass().getName() + " is handling a " + exchange.getRequestMethod() +
+								   "request for" + exchange.getRequestURI().getPath());
 		
-		// Someone used a method that wasn't GET.
-		if(!exchange.getRequestMethod().toUpperCase().equals("GET")) {
-			logger.warn("Someone made a {} request int the {} context with the following URL: {}",
-					exchange.getRequestMethod(), exchange.getHttpContext().getPath(),
-					exchange.getRequestURI().getPath());
+		// Checking if someone used a method that wasn't GET and sending 405.
+		if(!exchange.getRequestMethod().equalsIgnoreCase("GET")) {
+			System.out.println("Someone made a " + exchange.getRequestMethod() +
+									   " request in the " + exchange.getHttpContext().getPath() +
+									   " context with the following URL: " + exchange.getRequestURI().getPath());
 			exchange.sendResponseHeaders(405, 0);
 			exchange.close();
 			return;
 		}
 		
-		// Redirecting the user to "/" with a 302.
+		// Redirecting the user to "/" with a 302 if they went to an unhandled context or invalid resource.
 		if(!exchange.getRequestURI().getPath().equals("/")) {
-			logger.debug("Redirected user to root from: {}", exchange.getRequestURI().getPath());
+			System.out.println("Redirected user to root from: " + exchange.getRequestURI().getPath());
 			exchange.getResponseHeaders().add("Location", "/");
 			exchange.sendResponseHeaders(302, 0);
 			exchange.close();

@@ -7,8 +7,8 @@ public class Post {
 	public static final String DEFAULT_MESSAGE = "";
 	public static final int SIZE_MAX_MESSAGE = 2048;
 	
-	private String author, message;
-	private long postId, postDate;
+	private final String author, message;
+	private final long postId, postDate;
 	
 	public Post(long postId) {
 		this(postId, "", DEFAULT_AUTHOR, System.currentTimeMillis());

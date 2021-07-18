@@ -7,6 +7,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class ResourceHelpers {
+	/**
+	 *
+	 * @param resourcePath
+	 * @return true or false depending on whether or not the given Path points to an existing resource.
+	 */
 	public static boolean isResourceAvailable(Path resourcePath) {
 		return (ResourceHelpers.class.getResource(resourcePath.toString().replace('\\', '/')) != null);
 	}

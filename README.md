@@ -1,35 +1,43 @@
 # Simple Chan
+A very barebone textboard made using the standard JRE libraries for everything except the logging which is being removed.
 
-A very barebone textboard made using the standard JRE libraries for everything except the logging.
-
-## Why 
-
-The goal of this project was to make the simplest "functional" and extensible imageboard I could possibly do.
+## Why
+The goal of this project was to make the simplest "functional" and extensible imageboard I could possibly do without
+getting lost in complex libraries.
 
 ## Features <sub><sup><sub>or lack thereof</sub></sup></sub>
 
 ### Present
-
-* Multiple boards per instance
-* No storage usage (Everything stays in memory)
+&nbsp;&nbsp;● Multiple boards per instance<br>
+&nbsp;&nbsp;● No storage usage (Everything stays in memory)<br>
+&nbsp;&nbsp;● Basic launch arguments for the port and boards
 
 ### Missing
-
-Here is a list of the missing features compared to more mainstream textboard solutions.
-
-* Images
-* Rate-limiting
-* Captchas
-* Auto thread pruning
-* Admin controls
+Here is a list of the missing features compared to more mainstream textboard solutions:<br>
+&nbsp;&nbsp;● Images<br>
+&nbsp;&nbsp;● Rate-limiting<br>
+&nbsp;&nbsp;● Captchas<br>
+&nbsp;&nbsp;● Auto thread pruning<br>
+&nbsp;&nbsp;● Admin controls<br>
+&nbsp;&nbsp;● Security measures (None are really implemented here)
 
 All these features haven't been implemented in order to keep the project as simple as possible.
 
+## Running
+```java -jar simple-chan-1.1.0.jar [--board=<board_id;board_name>] [--help] [--port=<port>]```
+
+You can choose a specific port with the `--port=<port>` argument.
+
+You can define custom baord with the `--board=<board_id;board_name>` argument.<br>
+&nbsp;&nbsp;<i>Example: `--board=b;Random` or `"--board=g;Nerds' Den"`</i>
+
+If no arguments are given, the application will use the default values given in the help text.
+
 ## Building
+In order to build the project, you can simply run the `customFatJar` gradle task and check the [/build/libs](build/libs)
+folder for the compiled jar file.
 
-
-
-## API
+## API (Will be rewritten for v2.0 as I document the code)
 
 GET - Using ???<br>
 POST - Using form fields<br>

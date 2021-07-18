@@ -3,10 +3,10 @@ package com.azias.chan;
 import java.util.LinkedList;
 
 public class Board {
-	private String id, name;
-	private long currentBoardPostId;
+	private final String id, name;
+	private final LinkedList<Thread> threads;
 	
-	private LinkedList<Thread> threads;
+	private long currentBoardPostId;
 	
 	public Board(String id, String name) {
 		this.id = id;
@@ -16,10 +16,21 @@ public class Board {
 		threads = new LinkedList<>();
 	}
 	
+	/**
+	 * Create and registers a Thread Object with the given post and the default thread title.
+	 * @param originalPost - A Post Object to be used as OP's post.
+	 * @return A new Thread Object with the given post as OP's post and the default title.
+	 */
 	public boolean createThread(Post originalPost) {
 		return createThread(originalPost, Thread.DEFAULT_TITLE);
 	}
 	
+	/**
+	 * Create and registers a Thread Object with the given post and title.
+	 * @param originalPost - A Post Object to be used as OP's post.
+	 * @param title - Title of the thread.
+	 * @return A new Thread Object with the given post as OP's post.
+	 */
 	public boolean createThread(Post originalPost, String title) {
 		if(originalPost == null) {
 			throw new NullPointerException("A null Post Object was added to a thread !");
@@ -28,14 +39,11 @@ public class Board {
 		return threads.add(new Thread(originalPost, title));
 	}
 	
-	public String getId() {
-		return id;
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
+	/**
+	 * Search if a Thread Object with a matching id exists in the current board.
+	 * @param threadId The desired thread's id.
+	 * @return true if the thread was found, false otherwise.
+	 */
 	public boolean hasThreadById(long threadId) {
 		if(threadId >= 0) {
 			for(Thread thread : threads) {
@@ -48,6 +56,11 @@ public class Board {
 		return false;
 	}
 	
+	/**
+	 * Search and retrieve a Thread Object by its id in the current board.
+	 * @param threadId The desired thread's id.
+	 * @return The desired Thread Object or null.
+	 */
 	public Thread getThreadById(long threadId) {
 		if(threadId >= 0) {
 			for(Thread thread : threads) {
@@ -60,12 +73,24 @@ public class Board {
 		return null;
 	}
 	
-	public long getCurrentBoardPostId() {
+	/**
+	 * Increments and returns the board's latest post's id.
+	 * @return The newly incremented board's latest post's id.
+	 */
+	public long getNextBoardPostId() {
+		currentBoardPostId++;
 		return currentBoardPostId;
 	}
 	
-	public long getNextBoardPostId() {
-		currentBoardPostId++;
+	public String getId() {
+		return id;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public long getCurrentBoardPostId() {
 		return currentBoardPostId;
 	}
 	
